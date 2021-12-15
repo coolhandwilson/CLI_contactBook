@@ -54,6 +54,8 @@ def contact_book(*file_name):
     :return: None
     """
     # Allow user to choose main directory file - use default if none provided
+    contact_types = False
+
     if len(file_name) == 0:
         main_file = "central"
 
@@ -67,10 +69,6 @@ def contact_book(*file_name):
 
     except FileNotFoundError:
         print("No contact records found.\n")
-        contact_types = False
-
-    else:
-        display_contact_types(contact_types)
 
     # If no file contents - get user to create new
     if contact_types:
