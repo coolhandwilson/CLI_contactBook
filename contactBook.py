@@ -3,13 +3,13 @@ import sys
 import io
 
 
-def display_contact_types(list_of_contacts: list):
+def display_contact_types(sub_books: list):
     """
 
-    :param list_of_contacts:
+    :param sub_books:
     :return:
     """
-    pass
+
 
 
 def prompt_new_book():
@@ -20,15 +20,18 @@ def prompt_user_options():
     pass
 
 
-def contact_book():
+def contact_book(file_name=None):
     """
     Display options for user.
 
     :return:
     """
-    master_file = "master"
+    # Allow user to choose main directory file - use default if none provided
+    if file_name is None:
+        file_name = "master"
+
     try:
-        with open(f"{master_file}.txt", 'r') as master:
+        with open(f"{file_name}.txt", 'r') as master:
             contact_types = master.readlines()
     except FileNotFoundError:
         print("No contact records found.\n")
