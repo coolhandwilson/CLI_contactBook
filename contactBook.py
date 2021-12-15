@@ -40,33 +40,27 @@ def prompt_new_book(*file_name: tuple):
         user_choice = new_sublist()
 
 
-
-
-
-
-
-
-
 def prompt_user_options(main_directory):
     pass
 
 
-def contact_book(file_name=None):
+def contact_book(*file_name):
     """
     Display options for user.
 
     :return:
     """
     # Allow user to choose main directory file - use default if none provided
-    if file_name is None:
-        file_name = "main"
+    if len(file_name) == 0:
+        file_name = "central"
 
     try:
-        with open(f"{file_name}.txt", 'r') as main:
-            contact_types = main.readlines()
+        with open(f"{file_name[0]}.txt", 'r') as central:
+            contact_types = central.readlines()
+
     except FileNotFoundError:
         print("No contact records found.\n")
-        contact_types = ''
+
     else:
         display_contact_types(contact_types)
 
@@ -75,3 +69,18 @@ def contact_book(file_name=None):
 
     else:
         prompt_user_options(file_name)
+
+
+def main():
+    """
+    Drive the program.
+
+    """
+    if len(sys.argv) == 1:
+        contact_book()
+    else:
+        contact_book(sys.argv[1:])
+
+
+if __name__ == "__main__":
+    main()
