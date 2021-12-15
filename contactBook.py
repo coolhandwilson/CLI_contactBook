@@ -13,9 +13,16 @@ def display_contact_types(sub_books: list):
         print("Book {:<2}{:*>25}".format(number + 1, sub_books[number]))
 
 
-def new_sublist(new_file: bool = False):
+def new_sublist(current_file: list):
     categories = ['Friends', 'Business', 'School', 'Family']
 
+    # Remove pre-existing address books from user options
+    if current_file != 0:
+        for item in categories.copy():
+            if item in current_file:
+                categories.remove(item)
+
+    # Get user choice of new address book
     while True:
         print("Please choose a new sub-category: \n")
         display_contact_types(categories)
@@ -30,17 +37,19 @@ def new_sublist(new_file: bool = False):
             return categories[choice - 1]
 
 
-def prompt_new_book(*file_name: tuple):
+def prompt_new_book(contact_sublist: list):
     """
 
     :return:
     """
-    print("Hello! you don't seem to have any entries in your address book. Let's start with making a new category.")
-    if len(file_name) == 0:
-        user_choice = new_sublist()
+    # If no other books exist
+    if len(contact_sublist) == 0:
+        print("Hello! you don't seem to have any entries in your address book. Let's start with making a new category.")
+
+    user_choice = new_sublist(contact_sublist)
 
 
-def prompt_user_options(main_directory):
+def prompt_user_options(main_directory: list):
     pass
 
 
@@ -54,7 +63,7 @@ def contact_book(*file_name):
     :return: None
     """
     # Allow user to choose main directory file - use default if none provided
-    contact_types = False
+    contact_types = []
 
     if len(file_name) == 0:
         main_file = "central"
@@ -71,11 +80,11 @@ def contact_book(*file_name):
         print("No contact records found.\n")
 
     # If no file contents - get user to create new
-    if contact_types:
+    if len(contact_types) > 0:
         prompt_user_options(contact_types)
 
     else:
-        prompt_new_book()
+        prompt_new_book(contact_types)
 
 
 def main():
