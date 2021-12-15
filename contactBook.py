@@ -55,25 +55,29 @@ def contact_book(*file_name):
     """
     # Allow user to choose main directory file - use default if none provided
     if len(file_name) == 0:
-        file_name = "central"
+        main_file = "central"
+
+    else:
+        main_file = file_name[0]
 
     # Try to open central - display existing file contents, if any (in else block)
     try:
-        with open(f"{file_name[0]}.txt", 'r') as central:
+        with open(f"{main_file}.txt", 'r') as central:
             contact_types = central.readlines()
 
     except FileNotFoundError:
         print("No contact records found.\n")
+        contact_types = False
 
     else:
         display_contact_types(contact_types)
 
     # If no file contents - get user to create new
-    if len(contact_types) == 0:
-        prompt_new_book()
+    if contact_types:
+        prompt_user_options(contact_types)
 
     else:
-        prompt_user_options(file_name)
+        prompt_new_book()
 
 
 def main():
