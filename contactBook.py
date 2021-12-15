@@ -9,7 +9,8 @@ def display_contact_types(sub_books: list):
     :param sub_books:
     :return:
     """
-
+    for number, item in enumerate(sub_books):
+        print("Book {:<2}{:*>25}".format(number + 1, sub_books[number]))
 
 
 def prompt_new_book():
