@@ -3,6 +3,21 @@ import sys
 import io
 
 
+def display_contact_types(list_of_contacts: list):
+    """
+
+    :param list_of_contacts:
+    :return:
+    """
+    pass
+
+
+def prompt_new_book():
+    pass
+
+
+def prompt_user_options():
+    pass
 
 
 def contact_book():
