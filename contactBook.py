@@ -46,14 +46,18 @@ def prompt_user_options(main_directory):
 
 def contact_book(*file_name):
     """
-    Display options for user.
 
-    :return:
+    :param file_name: a tuple
+    :pre-condition: file_name may be empty or contain file names in string format
+    :pre-condition: first item of file_name, if any, must be the name of the central directory of contact sub-lists
+    :post-condition: the contents of file_name, if any, drive the rest of the program
+    :return: None
     """
     # Allow user to choose main directory file - use default if none provided
     if len(file_name) == 0:
         file_name = "central"
 
+    # Try to open central - display existing file contents, if any (in else block)
     try:
         with open(f"{file_name[0]}.txt", 'r') as central:
             contact_types = central.readlines()
@@ -64,6 +68,7 @@ def contact_book(*file_name):
     else:
         display_contact_types(contact_types)
 
+    # If no file contents - get user to create new
     if len(contact_types) == 0:
         prompt_new_book()
 
@@ -78,6 +83,7 @@ def main():
     """
     if len(sys.argv) == 1:
         contact_book()
+
     else:
         contact_book(sys.argv[1:])
 
