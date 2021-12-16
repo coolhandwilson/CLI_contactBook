@@ -49,7 +49,7 @@ def new_sublist(current_file: list):
             return categories[choice - 1]
 
 
-def create_new_file(new_file_name: str, file_type: bool = False, central: str = None):
+def create_new_file(new_file_name: str, file_type: bool = False, central: str = "central"):
     """
     Create a new json or txt file.
 
@@ -69,12 +69,12 @@ def create_new_file(new_file_name: str, file_type: bool = False, central: str = 
         category_type = 'txt'
 
     with open(f"{new_file_name}.{category_type}", 'w') as new_file:
-        new_file.write("Placeholder text")
+        new_file.write("")
 
     # If this is a sub-file, add it to our central directory
-    if file_type is True:
+    if file_type is False:
         with open(f"{central}.txt", 'a+') as central:
-            central.write(f"{new_file_name}")
+            central.write(f"{new_file_name}\n")
 
         print("New sub-file created!\n")
 
@@ -126,7 +126,32 @@ def add_contact(address_book: str):
 
 
 def prompt_user_options(central_directory: list):
+    """
+
+    :param central_directory:
+    :return:
+    """
     pass
+    # add_contact()
+
+
+def get_contact_books(file):
+    """
+
+    :param file:
+    :return:
+    """
+    contact_types = []
+
+    try:
+        with open(f"{file}.txt", 'r') as central:
+            contact_types = central.readlines()
+
+    except FileNotFoundError:
+        print("No contact records found.\n")
+
+    return contact_types
+
 
 
 def contact_book(*file_name):
@@ -140,7 +165,7 @@ def contact_book(*file_name):
     :return: None
     """
     # Allow user to choose central directory file - use default if none provided
-    contact_types = []
+    # contact_types = []
 
     if len(file_name) == 0:
         central_file = "central"
@@ -149,12 +174,13 @@ def contact_book(*file_name):
         central_file = file_name[0]
 
     # Try to open central - display existing file contents, if any (in else block)
-    try:
-        with open(f"{central_file}.txt", 'r') as central:
-            contact_types = central.readlines()
-
-    except FileNotFoundError:
-        print("No contact records found.\n")
+    # try:
+    #     with open(f"{central_file}.txt", 'r') as central:
+    #         contact_types = central.readlines()
+    #
+    # except FileNotFoundError:
+    #     print("No contact records found.\n")
+    contact_types = get_contact_books(central_file)
 
     # If no file contents - get user to create new
     if len(contact_types) > 0:
