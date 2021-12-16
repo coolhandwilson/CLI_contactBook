@@ -79,12 +79,14 @@ def create_new_file(new_file_name: str, file_type: bool = False, central: str = 
         print("New sub-file created!\n")
 
 
-def prompt_new_book(contact_sublist: list):
+def prompt_new_book(contact_sublist: list, main_directory: str):
     """
     Get user's choice for new sub-book of contacts.
 
     :param contact_sublist: a list
+    :param main_directory: a string
     :pre-condition: contact_sublist must be a list of the current, active contact sub-books in the central directory
+    :pre-condition:
     :post-condition: a new sub-book file is created, added to the central directory
     :return: None
     """
@@ -100,7 +102,7 @@ def prompt_new_book(contact_sublist: list):
     # Add file to central directory
 
     # Provide the user with their options for adding, revising, viewing their contacts
-    prompt_user_options(contact_sublist)
+    prompt_user_options(main_directory)
 
 
 def add_contact(address_book: str):
@@ -125,14 +127,15 @@ def add_contact(address_book: str):
     print("New entry added!")
 
 
-def prompt_user_options(central_directory: list):
+def prompt_user_options(main_directory: str):
     """
 
-    :param central_directory:
+    :param main_directory:
     :return:
     """
-    pass
-    # add_contact()
+    books = get_contact_books(main_directory)
+    user_choice = new_sublist(books)
+    add_contact(user_choice)
 
 
 def get_contact_books(file):
@@ -153,7 +156,6 @@ def get_contact_books(file):
     return contact_types
 
 
-
 def contact_book(*file_name):
     """
     Read central directory and create one if necessary.
@@ -168,29 +170,29 @@ def contact_book(*file_name):
     # contact_types = []
 
     if len(file_name) == 0:
-        central_file = "central"
+        main_directory = "central"
 
     else:
-        central_file = file_name[0]
+        main_directory = file_name[0]
 
     # Try to open central - display existing file contents, if any (in else block)
     # try:
-    #     with open(f"{central_file}.txt", 'r') as central:
+    #     with open(f"{main_directory}.txt", 'r') as central:
     #         contact_types = central.readlines()
     #
     # except FileNotFoundError:
     #     print("No contact records found.\n")
-    contact_types = get_contact_books(central_file)
+    contact_types = get_contact_books(main_directory)
 
     # If no file contents - get user to create new
     if len(contact_types) > 0:
         # Create new central file/directory
 
-        prompt_user_options(contact_types)
+        prompt_user_options(main_directory)
 
     else:
-        create_new_file(central_file, True, central_file)
-        prompt_new_book(contact_types)
+        create_new_file(main_directory, True, main_directory)
+        prompt_new_book(contact_types, main_directory)
 
 
 def main():
