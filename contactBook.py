@@ -1,5 +1,6 @@
 # import necessary modules
 import sys
+import json
 import io
 
 
@@ -37,22 +38,29 @@ def new_sublist(current_file: list):
             return categories[choice - 1]
 
 
-def create_new_file(new_file_name: str, file_type: bool = False):
+def create_new_file(new_file_name: str, file_type: bool = False, central: str = None):
     """
 
     :param new_file_name:
     :param file_type:
+    :param central:
     :return:
     """
     category_type = 'json'
 
+    # If True, then we are creating the central directory (a text file)
     if file_type is True:
         category_type = 'txt'
 
     with open(f"{new_file_name}.{category_type}", 'w') as new_file:
         new_file.write("Placeholder text")
 
-    print("New sub-file created!\n")
+    # If this is a sub-file, add it to our central directory
+    if file_type is False:
+        with open(f"{central}.txt", 'a+') as central:
+            central.write(f"{new_file_name}")
+
+        print("New sub-file created!\n")
 
 
 def prompt_new_book(contact_sublist: list):
