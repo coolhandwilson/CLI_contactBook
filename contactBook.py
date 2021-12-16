@@ -37,6 +37,18 @@ def new_sublist(current_file: list):
             return categories[choice - 1]
 
 
+def create_new_file(new_file_name: str):
+    """
+
+    :param new_file_name:
+    :return:
+    """
+    with open(f"{new_file_name}.txt", 'w') as new_file:
+        new_file.write("Placeholder text")
+
+    print("New sub-file created!\n")
+
+
 def prompt_new_book(contact_sublist: list):
     """
 
@@ -47,6 +59,9 @@ def prompt_new_book(contact_sublist: list):
         print("Hello! you don't seem to have any entries in your address book. Let's start with making a new category.")
 
     user_choice = new_sublist(contact_sublist)
+
+    # Create new file with chosen category name
+
 
 
 def prompt_user_options(main_directory: list):
@@ -81,6 +96,8 @@ def contact_book(*file_name):
 
     # If no file contents - get user to create new
     if len(contact_types) > 0:
+        # Create new main file/directory
+
         prompt_user_options(contact_types)
 
     else:
