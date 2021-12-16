@@ -83,6 +83,20 @@ def prompt_new_book(contact_sublist: list):
     prompt_user_options(contact_sublist)
 
 
+def add_contact(address_book: str):
+    entry = {
+        "Name": input("Please enter your contact's name... \n"),
+        "Number": input("Please enter their number... \n"),
+        "Address": input("Please enter their address... \n"),
+        "Notes": input("Please enter any notes... \n")
+    }
+
+    with open(f"{address_book}.json", 'a+') as book:
+        json.dump(entry, book)
+
+    print("New entry added!")
+
+
 def prompt_user_options(central_directory: list):
     pass
 
