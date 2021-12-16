@@ -77,7 +77,10 @@ def create_new_file(new_file_name: str, file_type: bool = False, central: str = 
         category_type = 'txt'
 
     with open(f"{new_file_name}.{category_type}", 'w') as new_file:
-        new_file.write("")
+        if category_type == 'json':
+            json.dump("{}", new_file)
+        else:
+            new_file.write("")
 
     # If this is a sub-file, add it to our central directory
     if file_type is False:
