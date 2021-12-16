@@ -63,8 +63,13 @@ def prompt_new_book(contact_sublist: list):
     # Create new file with chosen category name
     create_new_file(user_choice)
 
+    # Add file to central directory
 
-def prompt_user_options(main_directory: list):
+    # Provide the user with their options
+    prompt_user_options(contact_sublist)
+
+
+def prompt_user_options(central_directory: list):
     pass
 
 
@@ -77,18 +82,18 @@ def contact_book(*file_name):
     :post-condition: the contents of file_name, if any, drive the rest of the program
     :return: None
     """
-    # Allow user to choose main directory file - use default if none provided
+    # Allow user to choose central directory file - use default if none provided
     contact_types = []
 
     if len(file_name) == 0:
-        main_file = "central"
+        central_file = "central"
 
     else:
-        main_file = file_name[0]
+        central_file = file_name[0]
 
     # Try to open central - display existing file contents, if any (in else block)
     try:
-        with open(f"{main_file}.txt", 'r') as central:
+        with open(f"{central_file}.txt", 'r') as central:
             contact_types = central.readlines()
 
     except FileNotFoundError:
@@ -96,14 +101,13 @@ def contact_book(*file_name):
 
     # If no file contents - get user to create new
     if len(contact_types) > 0:
-        # Create new main file/directory
+        # Create new central file/directory
 
         prompt_user_options(contact_types)
 
     else:
+        create_new_file(central_file)
         prompt_new_book(contact_types)
-
-
 
 
 def main():
