@@ -6,15 +6,26 @@ import io
 
 def display_contact_types(sub_books: list):
     """
+    Display sub-books in enumerated list.
 
-    :param sub_books:
-    :return:
+    :param sub_books: a list
+    :pre-condition: sub_books must be a list of contact sub-books present in the user's central directory
+    :post-condition: no change to arguments submitted to this function
+    :return: None
     """
     for number, item in enumerate(sub_books):
         print("Book {:<2}{:*>25}".format(number + 1, sub_books[number]))
 
 
 def new_sublist(current_file: list):
+    """
+    Add new sub-book to the central directory, create associated JSON file.
+
+    :param current_file: a list
+    :pre-condition: current_file must be a list of the current sub-books in the central directory
+    :post-condition: no changes to current_file; user selection stored in local variable and returned
+    :return: the user's selection for a new sub-book of contacts
+    """
     categories = ['Friends', 'Business', 'School', 'Family']
 
     # Remove pre-existing address books from user options
@@ -40,11 +51,16 @@ def new_sublist(current_file: list):
 
 def create_new_file(new_file_name: str, file_type: bool = False, central: str = None):
     """
+    Create a new json or txt file.
 
-    :param new_file_name:
-    :param file_type:
-    :param central:
-    :return:
+    :param new_file_name: a string
+    :param file_type: a boolean
+    :param central: a string or None
+    :pre-condition: new_file_name must be a string representing the name of the new file to be created
+    :pre-condition: file_type must be True if the new file is to be a text file, False if it is to be a json file
+    :pre-condition: central will store the name of the new central directory file to be created, if any
+    :post-condition: a new file, json or txt, is created in the working directory
+    :return: None
     """
     category_type = 'json'
 
@@ -65,8 +81,12 @@ def create_new_file(new_file_name: str, file_type: bool = False, central: str = 
 
 def prompt_new_book(contact_sublist: list):
     """
+    Get user's choice for new sub-book of contacts.
 
-    :return:
+    :param contact_sublist: a list
+    :pre-condition: contact_sublist must be a list of the current, active contact sub-books in the central directory
+    :post-condition: a new sub-book file is created, added to the central directory
+    :return: None
     """
     # If no other books exist
     if len(contact_sublist) == 0:
@@ -79,11 +99,19 @@ def prompt_new_book(contact_sublist: list):
 
     # Add file to central directory
 
-    # Provide the user with their options
+    # Provide the user with their options for adding, revising, viewing their contacts
     prompt_user_options(contact_sublist)
 
 
 def add_contact(address_book: str):
+    """
+    Add a contact entry to a sub-book.
+
+    :param address_book: a string
+    :pre-condition: address_book must be the name of the sub-book that the entry is to be added to
+    :post-condition: new contact json object is added to the address sub-book
+    :return: None
+    """
     entry = {
         "Name": input("Please enter your contact's name... \n"),
         "Number": input("Please enter their number... \n"),
@@ -103,6 +131,7 @@ def prompt_user_options(central_directory: list):
 
 def contact_book(*file_name):
     """
+    Read central directory and create one if necessary.
 
     :param file_name: a tuple
     :pre-condition: file_name may be empty or contain file names in string format
