@@ -28,7 +28,7 @@ def new_sublist(current_file: list):
         display_contact_types(categories)
         choice = input("Please enter the corresponding number of the category you wish to create.\n")
 
-        if choice not in [number for number in range(1, len(categories) + 1)]:
+        if choice not in [str(number) for number in range(1, len(categories) + 1)]:
             print("Invalid input. Please enter numeric values only.\n")
 
         else:
@@ -61,7 +61,7 @@ def prompt_new_book(contact_sublist: list):
     user_choice = new_sublist(contact_sublist)
 
     # Create new file with chosen category name
-
+    create_new_file(user_choice)
 
 
 def prompt_user_options(main_directory: list):
@@ -102,6 +102,8 @@ def contact_book(*file_name):
 
     else:
         prompt_new_book(contact_types)
+
+
 
 
 def main():
