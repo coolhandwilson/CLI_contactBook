@@ -72,7 +72,7 @@ def create_new_file(new_file_name: str, file_type: bool = False, central: str = 
         new_file.write("Placeholder text")
 
     # If this is a sub-file, add it to our central directory
-    if file_type is False:
+    if file_type is True:
         with open(f"{central}.txt", 'a+') as central:
             central.write(f"{new_file_name}")
 
@@ -163,7 +163,7 @@ def contact_book(*file_name):
         prompt_user_options(contact_types)
 
     else:
-        create_new_file(central_file)
+        create_new_file(central_file, True, central_file)
         prompt_new_book(contact_types)
 
 
