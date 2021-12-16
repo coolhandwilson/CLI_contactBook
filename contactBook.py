@@ -37,13 +37,19 @@ def new_sublist(current_file: list):
             return categories[choice - 1]
 
 
-def create_new_file(new_file_name: str):
+def create_new_file(new_file_name: str, file_type: bool = False):
     """
 
     :param new_file_name:
+    :param file_type:
     :return:
     """
-    with open(f"{new_file_name}.txt", 'w') as new_file:
+    category_type = 'json'
+
+    if file_type is True:
+        category_type = 'txt'
+
+    with open(f"{new_file_name}.{category_type}", 'w') as new_file:
         new_file.write("Placeholder text")
 
     print("New sub-file created!\n")
