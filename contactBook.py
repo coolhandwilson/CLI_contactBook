@@ -17,9 +17,22 @@ def display_contact_types(sub_books: list):
         print("Book {:<2}{:*>25}".format(number + 1, sub_books[number]))
 
 
+def input_selector(categories: list):
+
+    choice = input()
+
+    if choice not in [str(number) for number in range(1, len(categories) + 1)]:
+        print("Invalid input. Please enter numeric values only.\n")
+
+    else:
+        choice = int(choice)
+        print(f"Wonderful. You have selected {categories[choice - 1]}.")
+        return categories[choice - 1].strip()
+
+
 def new_sublist(current_file: list):
     """
-    Add new sub-book to the central directory, create associated JSON file.
+    Get user's choice of categories for new contact book.
 
     :param current_file: a list
     :pre-condition: current_file must be a list of the current sub-books in the central directory
@@ -35,18 +48,13 @@ def new_sublist(current_file: list):
                 categories.remove(item)
 
     # Get user choice of new address book
-    while True:
+    choice = ''
+    while not choice:
         print("Please choose a new sub-category: \n")
         display_contact_types(categories)
-        choice = input("Please enter the corresponding number of the category you wish to create.\n")
+        choice = input_selector(categories)
 
-        if choice not in [str(number) for number in range(1, len(categories) + 1)]:
-            print("Invalid input. Please enter numeric values only.\n")
-
-        else:
-            choice = int(choice)
-            print(f"Wonderful. You have selected {categories[choice - 1]}.")
-            return categories[choice - 1]
+    return choice
 
 
 def create_new_file(new_file_name: str, file_type: bool = False, central: str = "central"):
@@ -134,7 +142,13 @@ def prompt_user_options(main_directory: str):
     :return:
     """
     books = get_contact_books(main_directory)
-    user_choice = new_sublist(books)
+    print("Which category do you want to use?\n")
+    user_choice = ''
+
+    while not user_choice:
+        display_contact_types(books)
+        user_choice = input_selector(books)
+
     add_contact(user_choice)
 
 
@@ -176,12 +190,6 @@ def contact_book(*file_name):
         main_directory = file_name[0]
 
     # Try to open central - display existing file contents, if any (in else block)
-    # try:
-    #     with open(f"{main_directory}.txt", 'r') as central:
-    #         contact_types = central.readlines()
-    #
-    # except FileNotFoundError:
-    #     print("No contact records found.\n")
     contact_types = get_contact_books(main_directory)
 
     # If no file contents - get user to create new
