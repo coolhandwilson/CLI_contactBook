@@ -135,11 +135,13 @@ def add_contact(address_book: str):
     }
 
     with open(f"{address_book}.json", 'r+') as book:
+        # Read json file to variable
         book_json = json.load(book)
-        print(book_json)
+        # Update dictionary with new entry
         book_json.update(entry)
+        # Reset file pointer to 0
         book.seek(0)
-        print(book_json)
+        # Add updated dictionary to json file as object, prettify it along the way
         json.dump(book_json, book, sort_keys=True, indent=4)
 
     print("New entry added!")
