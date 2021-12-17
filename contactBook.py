@@ -21,7 +21,14 @@ def display_contact_types(sub_books: list):
 
 
 def input_selector(categories: list):
+    """
+    Evaluate user's choice to ensure validity.
 
+    :param categories: a list
+    :pre-condition: categories must be a list of valid options available to the user
+    :post-condition: the list is unchanged by this function
+    :return: If valid it returns the selection, if invalid return None
+    """
     choice = input()
 
     if choice not in [str(number) for number in range(1, len(categories) + 1)]:
