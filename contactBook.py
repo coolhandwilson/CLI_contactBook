@@ -126,8 +126,9 @@ def add_contact(address_book: str):
     :return: None
     """
     entry = {
-        input("Please enter your contact's name... \n"):
+        input("Please enter your contact's last name... \n"):
             {
+                "First name": input("Please enter their first name... \n"),
                 "Number": input("Please enter their number... \n"),
                 "Address": input("Please enter their address... \n"),
                 "Notes": input("Please enter any notes... \n")
