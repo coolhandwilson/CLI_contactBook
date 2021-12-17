@@ -4,6 +4,9 @@ import json
 import io
 
 
+# -----------------------------------------------------------------------------------------------
+# These functions are for the general operation of the program
+# -----------------------------------------------------------------------------------------------
 def display_contact_types(sub_books: list):
     """
     Display sub-books in enumerated list.
@@ -30,7 +33,7 @@ def input_selector(categories: list):
         return categories[choice - 1].strip()
 
 
-def new_sublist(current_file: list):
+def contact_book_choice(current_file: list):
     """
     Get user's choice of categories for new contact book.
 
@@ -57,6 +60,50 @@ def new_sublist(current_file: list):
     return choice
 
 
+def get_contact_books(file):
+    """
+    Create list out of books in main contact book directory.
+
+    :param file: a string
+    :pre-condition: file must be a string representing the name of a text file containing all contact books for the user
+    :post-condition: a list is created containing the names of the user's contact books
+    :return: a list
+    """
+    contact_types = []
+
+    try:
+        with open(f"{file}.txt", 'r') as central:
+            contact_types = central.readlines()
+
+    except FileNotFoundError:
+        print("No contact records found.\n")
+
+    return contact_types
+
+
+def prompt_user_options(central_directory: str):
+    """
+    Allow user to add, view, edit, and delete
+
+    :param central_directory: a string
+    :pre-condition: main_directory must be a string representing the name of the central directory file
+    :post condition: potential changes to the user's various contact books
+    :return: None
+    """
+    books = get_contact_books(central_directory)
+    print("Which book do you want to use?\n")
+    user_choice = ''
+
+    while not user_choice:
+        display_contact_types(books)
+        user_choice = input_selector(books)
+
+    add_contact(user_choice)
+
+
+# -----------------------------------------------------------------------------------------------
+# These functions relate to the creation of new client books
+# -----------------------------------------------------------------------------------------------
 def create_new_file(new_file_name: str, file_type: bool = False, central: str = "central"):
     """
     Create a new json or txt file.
@@ -105,7 +152,7 @@ def prompt_new_book(contact_sublist: list, main_directory: str):
     if len(contact_sublist) == 0:
         print("Hello! you don't seem to have any entries in your address book. Let's start with making a new category.")
 
-    user_choice = new_sublist(contact_sublist)
+    user_choice = contact_book_choice(contact_sublist)
 
     # Create new file with chosen category name
     create_new_file(user_choice)
@@ -116,6 +163,9 @@ def prompt_new_book(contact_sublist: list, main_directory: str):
     prompt_user_options(main_directory)
 
 
+# -----------------------------------------------------------------------------------------------
+# These functions relate to adding contacts to books
+# -----------------------------------------------------------------------------------------------
 def add_contact(address_book: str):
     """
     Add a contact entry to a sub-book.
@@ -146,41 +196,6 @@ def add_contact(address_book: str):
         json.dump(book_json, book, sort_keys=True, indent=4)
 
     print("New entry added!")
-
-
-def prompt_user_options(main_directory: str):
-    """
-
-    :param main_directory:
-    :return:
-    """
-    books = get_contact_books(main_directory)
-    print("Which category do you want to use?\n")
-    user_choice = ''
-
-    while not user_choice:
-        display_contact_types(books)
-        user_choice = input_selector(books)
-
-    add_contact(user_choice)
-
-
-def get_contact_books(file):
-    """
-
-    :param file:
-    :return:
-    """
-    contact_types = []
-
-    try:
-        with open(f"{file}.txt", 'r') as central:
-            contact_types = central.readlines()
-
-    except FileNotFoundError:
-        print("No contact records found.\n")
-
-    return contact_types
 
 
 def contact_book(*file_name):
