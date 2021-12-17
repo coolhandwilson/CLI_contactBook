@@ -90,16 +90,24 @@ def prompt_user_options(central_directory: str):
     :post condition: potential changes to the user's various contact books
     :return: None
     """
+    function_list = [add_contact, view_contacts, edit_contact]
     books = get_contact_books(central_directory)
     print("Which book do you want to use?\n")
-    user_choice = ''
+    book_choice_one = ''
+    book_choice_two = None
 
-    while not user_choice:
+    # Determine what book the user wants to work with
+    while not book_choice_one:
         display_contact_types(books)
-        user_choice = input_selector(books)
+        book_choice_one = input_selector(books)
 
-    add_contact(user_choice)
+    # Determine what the user wants to do
+    while not book_choice_two:
+        display_contact_types(function_list)
+        book_choice_two = input_selector(function_list)
 
+    # Call applicable contact book interface
+    book_choice_two(book_choice_one)
 
 # -----------------------------------------------------------------------------------------------
 # These functions relate to the creation of new client books
