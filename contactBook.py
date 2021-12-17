@@ -83,31 +83,46 @@ def get_contact_books(file):
 
 def prompt_user_options(central_directory: str):
     """
-    Allow user to add, view, edit, and delete
+    Get user choice of book they wish to use.
 
     :param central_directory: a string
+    :pre-condition: main_directory must be a string representing the name of the central directory file
+    :post condition: No changes to memory landscape
+    :return: None
+    """
+    books = get_contact_books(central_directory)
+    print("Which book do you want to use?\n")
+    user_choice = ''
+
+    # Determine what book the user wants to work with
+    while not user_choice:
+        display_contact_types(books)
+        user_choice = input_selector(books)
+
+    book_features(user_choice)
+
+
+def book_features(book: str):
+    """
+    Allow user to add, view, edit, and delete contacts from a book.
+
+    :param book: a string
     :pre-condition: main_directory must be a string representing the name of the central directory file
     :post condition: potential changes to the user's various contact books
     :return: None
     """
+    print("What would you like to do with this sub-list?")
     function_list = [add_contact, view_contacts, edit_contact]
-    books = get_contact_books(central_directory)
-    print("Which book do you want to use?\n")
-    book_choice_one = ''
-    book_choice_two = None
-
-    # Determine what book the user wants to work with
-    while not book_choice_one:
-        display_contact_types(books)
-        book_choice_one = input_selector(books)
+    user_choice = ''
 
     # Determine what the user wants to do
-    while not book_choice_two:
+    while not user_choice:
         display_contact_types(function_list)
-        book_choice_two = input_selector(function_list)
+        user_choice = input_selector(function_list)
 
     # Call applicable contact book interface
-    book_choice_two(book_choice_one)
+    user_choice(book_choice_one)
+
 
 # -----------------------------------------------------------------------------------------------
 # These functions relate to the creation of new client books
