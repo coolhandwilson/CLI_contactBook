@@ -78,7 +78,7 @@ def create_new_file(new_file_name: str, file_type: bool = False, central: str = 
 
     with open(f"{new_file_name}.{category_type}", 'w') as new_file:
         if category_type == 'json':
-            json.dump("{}", new_file)
+            json.dump({}, new_file)
         else:
             new_file.write("")
 
@@ -126,14 +126,21 @@ def add_contact(address_book: str):
     :return: None
     """
     entry = {
-        "Name": input("Please enter your contact's name... \n"),
-        "Number": input("Please enter their number... \n"),
-        "Address": input("Please enter their address... \n"),
-        "Notes": input("Please enter any notes... \n")
+        input("Please enter your contact's name... \n"):
+            {
+                "Number": input("Please enter their number... \n"),
+                "Address": input("Please enter their address... \n"),
+                "Notes": input("Please enter any notes... \n")
+            }
     }
 
-    with open(f"{address_book}.json", 'a+') as book:
-        json.dump(entry, book)
+    with open(f"{address_book}.json", 'r+') as book:
+        book_json = json.load(book)
+        print(book_json)
+        book_json.update(entry)
+        book.seek(0)
+        print(book_json)
+        json.dump(book_json, book, sort_keys=True, indent=4)
 
     print("New entry added!")
 
