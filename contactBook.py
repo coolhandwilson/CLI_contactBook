@@ -263,8 +263,31 @@ def view_contacts(address_book: str):
         print("-" * 84)
 
 
-def edit_contact():
-    pass
+def edit_contact(address_book: str):
+
+    # Store contacts in python dict
+    with open(f"{address_book}.json") as book:
+        contacts = json.load(book)
+
+    while True:
+        selection = input("Enter the last name of the contact you wish to edit.\n")
+
+        if selection.title() in contacts:
+            contacts[selection] = {
+                "First name": input("Please enter their first name... \n"),
+                "Number": input("Please enter their number... \n"),
+                "Address": input("Please enter their address... \n"),
+                "Notes": input("Please enter any notes... \n")
+            }
+            print("\nContact updated!")
+            return
+
+        elif selection.lower() in ['c', 'cancel']:
+            print("\nReturning to previous screen...")
+            return
+
+        else:
+            print("Error: Contact not found in dictionary")
 
 
 def contact_book(*file_name):
