@@ -17,7 +17,7 @@ def display_contact_types(sub_books: list):
     :return: None
     """
     for number, item in enumerate(sub_books):
-        print("Book {:<2}{:*>25}".format(number + 1, sub_books[number]))
+        print("Book {:<25}{:<}".format(number + 1, sub_books[number]))
 
 
 def input_selector(categories: list):
@@ -37,7 +37,10 @@ def input_selector(categories: list):
     else:
         choice = int(choice)
         print(f"Wonderful. You have selected {categories[choice - 1]}.")
-        return categories[choice - 1].strip()
+        if type(categories[choice-1]) == str:
+            return categories[choice - 1].strip()
+        else:
+            return categories[choice - 1]
 
 
 def contact_book_choice(current_file: list):
@@ -120,15 +123,15 @@ def book_features(book: str):
     """
     print("What would you like to do with this sub-list?")
     function_list = [add_contact, view_contacts, edit_contact]
-    user_choice = ''
+    user_choice = None
 
     # Determine what the user wants to do
-    while not user_choice:
-        display_contact_types(function_list)
+    while user_choice is None:
+        display_contact_types(['add_contact', 'view_contacts', 'edit_contact'])
         user_choice = input_selector(function_list)
 
     # Call applicable contact book interface
-    user_choice(book_choice_one)
+    user_choice(book)
 
 
 # -----------------------------------------------------------------------------------------------
@@ -226,6 +229,35 @@ def add_contact(address_book: str):
         json.dump(book_json, book, sort_keys=True, indent=4)
 
     print("New entry added!")
+
+
+def view_contacts(address_book: str):
+
+    # Store contacts in python dict
+    with open(f"{address_book}.json") as book:
+        contacts = json.load(book)
+
+    for key, value in contacts.items():
+        first_length = len(value["First name"])
+        second_length = len(key)
+        number_length = len(value["Number"]) + 1
+        address_length = len(value["Address"]) + 1
+
+        print("{:{}} {:{}} | {:{}} | {:{}} | {:25} |".format(
+            value["First name"],
+            first_length,
+            key,
+            second_length,
+            value["Number"],
+            number_length,
+            value["Address"],
+            address_length,
+            value["Notes"]
+        ))
+
+
+def edit_contact():
+    pass
 
 
 def contact_book(*file_name):
