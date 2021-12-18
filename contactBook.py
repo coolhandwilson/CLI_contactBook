@@ -220,12 +220,12 @@ def add_contact(address_book: str):
     :return: None
     """
     entry = {
-        input("Please enter your contact's last name... \n"):
+        input("Please enter your contact's last name... \n").title():
             {
-                "First name": input("Please enter their first name... \n"),
+                "First name": input("Please enter their first name... \n").title(),
                 "Number": input("Please enter their number... \n"),
-                "Address": input("Please enter their address... \n"),
-                "Notes": input("Please enter any notes... \n")
+                "Address": input("Please enter their address... \n").title(),
+                "Notes": input("Please enter any notes... \n").title()
             }
     }
 
@@ -278,12 +278,14 @@ def edit_contact(address_book: str):
         selection = input("Enter the last name of the contact you wish to edit.\n")
 
         if selection.title() in contacts:
-            contacts[selection] = {
-                "First name": input("Please enter their first name... \n"),
+            contacts[selection.title()] = {
+                "First name": input("Please enter their first name... \n").title(),
                 "Number": input("Please enter their number... \n"),
-                "Address": input("Please enter their address... \n"),
-                "Notes": input("Please enter any notes... \n")
+                "Address": input("Please enter their address... \n").title(),
+                "Notes": input("Please enter any notes... \n").title()
             }
+            with open(f"{address_book}.json", 'w') as book:
+                json.dump(contacts, book, sort_keys=True, indent=4)
             print("\nContact updated!")
             return
 
@@ -327,6 +329,8 @@ def contact_book(*file_name):
 
     while flag:
         flag = prompt_user_options(main_directory)
+
+    print("Goodbye!")
 
 
 def main():
