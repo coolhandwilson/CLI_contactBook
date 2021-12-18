@@ -31,7 +31,13 @@ def input_selector(categories: list):
     """
     choice = input()
 
-    if choice not in [str(number) for number in range(1, len(categories) + 1)]:
+    # Allow user to quit. Revise later to remove need for sys.exit
+
+    if choice in ['q', 'quit']:
+        print("Goodbye!")
+        sys.exit(0)
+
+    elif choice not in [str(number) for number in range(1, len(categories) + 1)]:
         print("Invalid input. Please enter numeric values only.\n")
 
     else:
