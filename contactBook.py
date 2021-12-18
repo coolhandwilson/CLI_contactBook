@@ -1,7 +1,6 @@
 # import necessary modules
 import sys
 import json
-import io
 
 
 # -----------------------------------------------------------------------------------------------
@@ -17,7 +16,7 @@ def display_contact_types(sub_books: list):
     :return: None
     """
     for number, item in enumerate(sub_books):
-        print("Book {:<25}{:<}".format(number + 1, sub_books[number]))
+        print("{:<25}{:<}".format(number + 1, sub_books[number]))
 
 
 def input_selector(categories: list):
@@ -34,15 +33,14 @@ def input_selector(categories: list):
     # Allow user to quit. Revise later to remove need for sys.exit
 
     if choice in ['q', 'quit']:
-        print("Goodbye!")
-        sys.exit(0)
+        return 'q'
 
     elif choice not in [str(number) for number in range(1, len(categories) + 1)]:
         print("Invalid input. Please enter numeric values only.\n")
 
     else:
         choice = int(choice)
-        print(f"Wonderful. You have selected {categories[choice - 1]}.")
+        print(f"Wonderful. You have selected {categories[choice - 1]}")
         if type(categories[choice-1]) == str:
             return categories[choice - 1].strip()
         else:
@@ -115,7 +113,13 @@ def prompt_user_options(central_directory: str):
         display_contact_types(books)
         user_choice = input_selector(books)
 
-    book_features(user_choice)
+    if user_choice == 'q':
+        return False
+
+    else:
+        book_features(user_choice)
+        print("Done! What would you like to do next??\n")
+        return True
 
 
 def book_features(book: str):
@@ -136,8 +140,12 @@ def book_features(book: str):
         display_contact_types(['add_contact', 'view_contacts', 'edit_contact'])
         user_choice = input_selector(function_list)
 
-    # Call applicable contact book interface
-    user_choice(book)
+    if user_choice == 'q':
+        return False
+
+    else:
+        # Call applicable contact book interface
+        user_choice(book)
 
 
 # -----------------------------------------------------------------------------------------------
@@ -196,10 +204,7 @@ def prompt_new_book(contact_sublist: list, main_directory: str):
     # Create new file with chosen category name
     create_new_file(user_choice)
 
-    # Add file to central directory
-
-    # Provide the user with their options for adding, revising, viewing their contacts
-    prompt_user_options(main_directory)
+    # Add new file to directory?
 
 
 # -----------------------------------------------------------------------------------------------
@@ -313,14 +318,15 @@ def contact_book(*file_name):
     contact_types = get_contact_books(main_directory)
 
     # If no file contents - get user to create new
-    if len(contact_types) > 0:
-        # Create new central file/directory
-
-        prompt_user_options(main_directory)
-
-    else:
+    if len(contact_types) == 0:
         create_new_file(main_directory, True, main_directory)
         prompt_new_book(contact_types, main_directory)
+
+    # Set guard condition for main program loop
+    flag = True
+
+    while flag:
+        flag = prompt_user_options(main_directory)
 
 
 def main():
