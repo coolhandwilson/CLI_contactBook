@@ -237,23 +237,24 @@ def view_contacts(address_book: str):
     with open(f"{address_book}.json") as book:
         contacts = json.load(book)
 
-    for key, value in contacts.items():
-        first_length = len(value["First name"])
-        second_length = len(key)
-        number_length = len(value["Number"]) + 1
-        address_length = len(value["Address"]) + 1
+    # Experimenting with string/print formatting - this creates a chart
+    title_list = ["Name", "Number", "Address", "Notes"]
 
-        print("{:{}} {:{}} | {:{}} | {:{}} | {:25} |".format(
+    print("-" * 84)
+    print("|{:^19}|{:^15}|{:^20}|{:^25}|".format(title_list[0], title_list[1], title_list[2], title_list[3]))
+    print("-" * 84)
+
+    for key, value in contacts.items():
+        print("|" + " " * 19 + "|" + " " * 15 + "|" + " " * 20 + "|" + " " * 25 + "|")
+        print("|{:^9} {:^9}|{:15}|{:20}|{:25}|".format(
             value["First name"],
-            first_length,
             key,
-            second_length,
             value["Number"],
-            number_length,
             value["Address"],
-            address_length,
             value["Notes"]
         ))
+        print("|" + " " * 19 + "|" + " " * 15 + "|" + " " * 20 + "|" + " " * 25 + "|")
+        print("-" * 84)
 
 
 def edit_contact():
