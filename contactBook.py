@@ -44,7 +44,7 @@ def input_selector(categories: list):
         if type(categories[choice-1]) == str:
             return categories[choice - 1].strip()
         else:
-            return categories[choice - 1]
+            return categories[choice]
 
 
 def contact_book_choice(current_file: list):
@@ -60,9 +60,9 @@ def contact_book_choice(current_file: list):
 
     # Remove pre-existing address books from user options
     if current_file != 0:
-        for item in categories.copy():
-            if item in current_file:
-                categories.remove(item)
+        for item in current_file:
+            if item.strip() in categories:
+                categories.remove(item.strip())
 
     # Get user choice of new address book
     choice = ''
@@ -117,31 +117,46 @@ def prompt_user_options(central_directory: str):
         return False
 
     else:
-        book_features(user_choice)
+        book_features(user_choice, central_directory)
         print("Done! What would you like to do next??\n")
         return True
 
 
-def book_features(book: str):
+def book_features(book: str, central_directory: str):
     """
     Allow user to add, view, edit, and delete contacts from a book.
 
     :param book: a string
+    :param central_directory: a string
     :pre-condition: main_directory must be a string representing the name of the central directory file
     :post condition: potential changes to the user's various contact books
     :return: None
     """
     print("What would you like to do with this sub-list?")
-    function_list = [add_contact, view_contacts, edit_contact]
+    function_list = [['add book', 'add contact', 'view contacts', 'edit contact'],
+                     contact_book_choice,
+                     add_contact,
+                     view_contacts,
+                     edit_contact
+                     ]
     user_choice = None
 
     # Determine what the user wants to do
     while user_choice is None:
-        display_contact_types(['add_contact', 'view_contacts', 'edit_contact'])
-        user_choice = input_selector(function_list)
+        display_contact_types(function_list[0])
+        user_choice = input_selector(function_list[0])
 
     if user_choice == 'q':
         return False
+
+    # use string to find index of function
+    user_choice = function_list[function_list[0].index(user_choice) + 1]
+
+    if user_choice == contact_book_choice:
+        # current_books = get_contact_books(central_directory)
+        # new_book = user_choice(current_books)
+        # create_new_file(new_book, False)
+        create_new_file(user_choice(get_contact_books(central_directory)), False, central_directory)
 
     else:
         # Call applicable contact book interface
@@ -184,14 +199,12 @@ def create_new_file(new_file_name: str, file_type: bool = False, central: str = 
         print("New sub-file created!\n")
 
 
-def prompt_new_book(contact_sublist: list, main_directory: str):
+def prompt_new_book(contact_sublist: list):
     """
     Get user's choice for new sub-book of contacts.
 
     :param contact_sublist: a list
-    :param main_directory: a string
     :pre-condition: contact_sublist must be a list of the current, active contact sub-books in the central directory
-    :pre-condition:
     :post-condition: a new sub-book file is created, added to the central directory
     :return: None
     """
@@ -203,8 +216,6 @@ def prompt_new_book(contact_sublist: list, main_directory: str):
 
     # Create new file with chosen category name
     create_new_file(user_choice)
-
-    # Add new file to directory?
 
 
 # -----------------------------------------------------------------------------------------------
@@ -322,7 +333,7 @@ def contact_book(*file_name):
     # If no file contents - get user to create new
     if len(contact_types) == 0:
         create_new_file(main_directory, True, main_directory)
-        prompt_new_book(contact_types, main_directory)
+        prompt_new_book(contact_types)
 
     # Set guard condition for main program loop
     flag = True
