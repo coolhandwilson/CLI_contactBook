@@ -40,9 +40,11 @@ def input_selector(categories: list):
 
     else:
         choice = int(choice)
-        print(f"Wonderful. You have selected {categories[choice - 1]}")
+        print(f"Wonderful. You have selected: {categories[choice - 1]}")
+
         if type(categories[choice-1]) == str:
             return categories[choice - 1].strip()
+
         else:
             return categories[choice]
 
@@ -66,8 +68,9 @@ def contact_book_choice(current_file: list):
 
     # Get user choice of new address book
     choice = ''
+
     while not choice:
-        print("Please choose a new sub-category: \n")
+        print("Please choose a new sub-category: ")
         display_contact_types(categories)
         choice = input_selector(categories)
 
@@ -117,9 +120,14 @@ def prompt_user_options(central_directory: str):
         return False
 
     else:
-        book_features(user_choice, central_directory)
+        choice = book_features(user_choice, central_directory)
+
+        if choice is False:
+            print("\nProcess cancelled.\n")
+            return choice
+
         print("Done! What would you like to do next??\n")
-        return True
+        return choice
 
 
 def book_features(book: str, central_directory: str):
@@ -132,13 +140,15 @@ def book_features(book: str, central_directory: str):
     :post condition: potential changes to the user's various contact books
     :return: None
     """
-    print("What would you like to do with this sub-list?")
+    print("What would you like to do with this sub-list?\n")
+
     function_list = [['add book', 'add contact', 'view contacts', 'edit contact'],
                      contact_book_choice,
                      add_contact,
                      view_contacts,
                      edit_contact
                      ]
+
     user_choice = None
 
     # Determine what the user wants to do
@@ -188,6 +198,7 @@ def create_new_file(new_file_name: str, file_type: bool = False, central: str = 
     with open(f"{new_file_name}.{category_type}", 'w') as new_file:
         if category_type == 'json':
             json.dump({}, new_file)
+
         else:
             new_file.write("")
 
@@ -210,7 +221,8 @@ def prompt_new_book(contact_sublist: list):
     """
     # If no other books exist
     if len(contact_sublist) == 0:
-        print("Hello! you don't seem to have any entries in your address book. Let's start with making a new category.")
+        print("Hello! you don't seem to have any entries in your address book. "
+              "Let's start with making a new category.\n")
 
     user_choice = contact_book_choice(contact_sublist)
 
@@ -250,10 +262,18 @@ def add_contact(address_book: str):
         # Add updated dictionary to json file as object, prettify it along the way
         json.dump(book_json, book, sort_keys=True, indent=4)
 
-    print("New entry added!")
+    print("New entry added!\n")
 
 
 def view_contacts(address_book: str):
+    """
+    View contacts stored in a sub-directory.
+
+    :param address_book: a string
+    :pre-condition: address_book must be a string representing the name of a json file containing contact information
+    :post-condition: no change to the memory landscape or parameters
+    :return: None
+    """
 
     # Store contacts in python dict
     with open(f"{address_book}.json") as book:
@@ -280,6 +300,14 @@ def view_contacts(address_book: str):
 
 
 def edit_contact(address_book: str):
+    """
+    Edit a pre-existing contact saved in a sub-directory.
+
+    :param address_book: a string
+    :pre-condition: address_book must be a string representing the name of a json file containing contact information
+    :post-condition: elements of the json data stored in a give sub-directory may be altered, overwritten by user
+    :return: None
+    """
 
     # Store contacts in python dict
     with open(f"{address_book}.json") as book:
@@ -305,7 +333,7 @@ def edit_contact(address_book: str):
             return
 
         else:
-            print("Error: Contact not found in dictionary")
+            print("Error: Contact not found in dictionary\n")
 
 
 def contact_book(*file_name):
