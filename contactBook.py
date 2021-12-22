@@ -43,7 +43,7 @@ def input_selector(categories: list):
         print(f"Wonderful. You have selected: {categories[choice - 1]}")
 
         if type(categories[choice-1]) == str:
-            return categories[choice - 1].strip()
+            return categories[choice - 1]
 
         else:
             return categories[choice]
@@ -95,6 +95,10 @@ def get_contact_books(file: str):
     except FileNotFoundError:
         print("No contact records found.\n")
 
+    # Remove trailing newline at end of each line
+    for index, line in enumerate(contact_types):
+        contact_types[index] = line.rstrip()
+
     return contact_types
 
 
@@ -116,18 +120,18 @@ def prompt_user_options(central_directory: str):
         display_contact_types(books)
         user_choice = input_selector(books)
 
-    if user_choice == 'q':
-        return False
+        if user_choice == 'q':
+            return False
 
-    else:
-        choice = book_features(user_choice, central_directory)
+        else:
+            choice = book_features(user_choice, central_directory)
 
-        if choice is False:
-            print("\nProcess cancelled.\n")
+            if choice is False:
+                print("\nProcess cancelled.\n")
+                return choice
+
+            print("Done! What would you like to do next??\n")
             return choice
-
-        print("Done! What would you like to do next??\n")
-        return choice
 
 
 def book_features(book: str, central_directory: str):
@@ -210,12 +214,14 @@ def create_new_file(new_file_name: str, file_type: bool = False, central: str = 
         print("New sub-file created!\n")
 
 
-def prompt_new_book(contact_sublist: list):
+def prompt_new_book(contact_sublist: list, main_directory: str):
     """
     Get user's choice for new sub-book of contacts.
 
     :param contact_sublist: a list
+    :param main_directory: a string
     :pre-condition: contact_sublist must be a list of the current, active contact sub-books in the central directory
+    :pre-condition: main_directory is a string representing the name of the main directory of contact books
     :post-condition: a new sub-book file is created, added to the central directory
     :return: None
     """
@@ -227,7 +233,7 @@ def prompt_new_book(contact_sublist: list):
     user_choice = contact_book_choice(contact_sublist)
 
     # Create new file with chosen category name
-    create_new_file(user_choice)
+    create_new_file(new_file_name=user_choice, central=main_directory)
 
 
 # -----------------------------------------------------------------------------------------------
@@ -336,7 +342,7 @@ def edit_contact(address_book: str):
             print("Error: Contact not found in dictionary\n")
 
 
-def contact_book(*file_name):
+def contact_book(file_name: list):
     """
     Read central directory and create one if necessary.
 
@@ -347,9 +353,7 @@ def contact_book(*file_name):
     :return: None
     """
     # Allow user to choose central directory file - use default if none provided
-    # contact_types = []
-
-    if len(file_name) > 1:
+    if len(file_name) == 1:
         main_directory = "central"
 
     else:
@@ -358,10 +362,14 @@ def contact_book(*file_name):
     # Try to open central - display existing file contents, if any (in else block)
     contact_types = get_contact_books(main_directory)
 
+    # if a second user argument is provided from the command line, start with this file
+    if len(file_name) >= 3 and file_name[2] in contact_types:
+        book_features(file_name[2], main_directory)
+
     # If no file contents - get user to create new
     if len(contact_types) == 0:
         create_new_file(main_directory, True, main_directory)
-        prompt_new_book(contact_types)
+        prompt_new_book(contact_types, main_directory)
 
     # Set guard condition for main program loop
     flag = True
@@ -377,11 +385,7 @@ def main():
     Drive the program.
 
     """
-    if len(sys.argv) == 1:
-        contact_book()
-
-    else:
-        contact_book(sys.argv)
+    contact_book(sys.argv)
 
 
 if __name__ == "__main__":
