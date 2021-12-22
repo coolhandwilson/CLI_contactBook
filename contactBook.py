@@ -77,7 +77,7 @@ def contact_book_choice(current_file: list):
     return choice
 
 
-def get_contact_books(file):
+def get_contact_books(file: str):
     """
     Create list out of books in main contact book directory.
 
@@ -349,11 +349,11 @@ def contact_book(*file_name):
     # Allow user to choose central directory file - use default if none provided
     # contact_types = []
 
-    if len(file_name) == 0:
+    if len(file_name) > 1:
         main_directory = "central"
 
     else:
-        main_directory = file_name[0]
+        main_directory = file_name[1]
 
     # Try to open central - display existing file contents, if any (in else block)
     contact_types = get_contact_books(main_directory)
@@ -381,7 +381,7 @@ def main():
         contact_book()
 
     else:
-        contact_book(sys.argv[1:])
+        contact_book(sys.argv)
 
 
 if __name__ == "__main__":
